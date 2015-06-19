@@ -1,0 +1,4 @@
+---
+rabbitmq_create_cluster: yes
+rabbitmq_cluster_master: "{{ hostvars[groups['master'][0]]['ansible_hostname'] }}"
+
