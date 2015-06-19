@@ -17,13 +17,16 @@ boxes = {
 }
 
 Vagrant.configure("2") do |config|
-  boxes.each do |box_name, box|
+  boxes_domain = "hack.aton"
+  config.landrush.enabled = true
+  config.landrush.tld = boxes_domain
+
+  boxes.each do |name, box|
     config.ssh.insert_key = false
 
-    config.vm.define box_name do |machine|
+    config.vm.define name do |machine|
       machine.vm.box      = box[:box]
-      machine.vm.box_url  = box[:url]
-      machine.vm.hostname = "%s" % box_name
+      machine.vm.hostname = "%s.%s" % [name, boxes_domain]
 
       machine.vm.provider "virtualbox" do |v|
         v.customize ["modifyvm", :id, "--cpuexecutioncap", box[:cpu]]
