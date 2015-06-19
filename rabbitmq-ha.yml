@@ -1,0 +1,9 @@
+---
+- name: rabbitmq high availability
+  hosts: all
+
+  roles:
+    - role: mtpereira.erlang
+      become: yes
+    - role: alexeymedvedchikov.rabbitmq
+      become: yes
