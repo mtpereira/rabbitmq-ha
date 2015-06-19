@@ -18,6 +18,8 @@ boxes = {
 
 Vagrant.configure("2") do |config|
   boxes.each do |box_name, box|
+    config.ssh.insert_key = false
+
     config.vm.define box_name do |machine|
       machine.vm.box      = box[:box]
       machine.vm.box_url  = box[:url]
@@ -35,7 +37,12 @@ Vagrant.configure("2") do |config|
       end
 
       machine.vm.provision :ansible do |ansible|
-        ansible.playbook = "rabbitmq-ha.yml"
+        ansible.playbook       = "rabbitmq-ha.yml"
+        ansible.inventory_path = "inventory"
+        ansible.groups = {
+          "master" => ["mq1"],
+          "slave"  => ["mq2"],
+        }
         ansible.verbose  = ENV['ANSIBLE_VERBOSE'] ||= "vv"
         ansible.tags     = ENV['ANSIBLE_TAGS']    ||= "all"
       end
