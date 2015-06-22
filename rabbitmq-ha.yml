@@ -21,3 +21,23 @@
     - role: alexeymedvedchikov.rabbitmq
       become: yes
       tags: rabbitmq-cluster
+
+  post_tasks:
+    - name: rabbitmq - copy config
+      copy:
+        dest: /etc/rabbitmq/rabbitmq.config
+        src: files/rabbitmq.config
+        mode: 0644
+        owner: root
+        group: root
+      become: yes
+      notify: rabbitmq - restart
+      tags: rabbitmq-config
+
+  handlers:
+    - name: rabbitmq - restart
+      service:
+        name: rabbitmq-server
+        state: restarted
+      become: yes
+
