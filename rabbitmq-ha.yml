@@ -23,10 +23,10 @@
       tags: rabbitmq-cluster
 
   post_tasks:
-    - name: rabbitmq - copy config
-      copy:
+    - name: rabbitmq - template config
+      template:
         dest: /etc/rabbitmq/rabbitmq.config
-        src: files/rabbitmq.config
+        src: files/rabbitmq.config.j2
         mode: 0644
         owner: root
         group: root
