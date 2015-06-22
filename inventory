@@ -1,8 +1,11 @@
 mq1 ansible_ssh_host=10.5.1.2
 mq2 ansible_ssh_host=10.5.1.3
+mq3 ansible_ssh_host=10.5.1.4
 
 [master]
 mq1
 
 [slave]
 mq2
+mq3
+

@@ -14,6 +14,12 @@ boxes = {
                         :cpu => "100",
                         :ram => "256"
                       },
+  "mq3" => {
+                        :box => "boxcutter/ubuntu1404",
+                        :ip  => '10.5.1.4',
+                        :cpu => "100",
+                        :ram => "256"
+                      },
 }
 
 Vagrant.configure("2") do |config|
@@ -44,7 +50,7 @@ Vagrant.configure("2") do |config|
         ansible.inventory_path = "inventory"
         ansible.groups = {
           "master" => ["mq1"],
-          "slave"  => ["mq2"],
+          "slave"  => ["mq2", "mq3"],
         }
         ansible.verbose  = ENV['ANSIBLE_VERBOSE'] ||= "vv"
         ansible.tags     = ENV['ANSIBLE_TAGS']    ||= "all"
