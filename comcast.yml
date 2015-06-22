@@ -1,6 +1,7 @@
 ---
-- name: install comcast
+- name: comcast - install
   hosts: all
+  tags: comcast_install
 
   vars:
     go_gopath: "/opt/golang"
@@ -38,5 +39,25 @@
         creates: "{{ go_gopath }}/pkg/linux_amd64/{{ comcast_pkg }}"
       environment:
         GOPATH: "{{ go_gopath }}"
+      become: yes
+
+- name: comcast - packet loss
+  hosts: all
+  tags: comcast_packet_loss
+
+  vars:
+    go_gopath: "/opt/golang"
+
+  tasks:
+    - name: comcast - set packet loss
+      command: "{{ go_gopath }}/bin/comcast --device eth1 --packet-loss 100%"
+      become: yes
+
+    - name: comcast - wait for user
+      pause:
+        prompt: Ready when you are...
+
+    - name: comcast - reset packet loss
+      command: "{{ go_gopath }}/bin/comcast --device eth1 --mode stop"
       become: yes
 
