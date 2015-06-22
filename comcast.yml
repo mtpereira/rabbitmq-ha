@@ -1,0 +1,42 @@
+---
+- name: install comcast
+  hosts: all
+
+  vars:
+    go_gopath: "/opt/golang"
+    comcast_pkg: "github.com/tylertreat/comcast"
+
+  tasks:
+    - name: install git
+      apt:
+        pkg: git
+        update_cache: yes
+        cache_valid_time: 3600
+        state: installed
+      become: yes
+
+    - name: install go
+      apt:
+        pkg: golang
+        update_cache: yes
+        cache_valid_time: 3600
+        state: installed
+      become: yes
+
+    - name: set GOPATH
+      lineinfile:
+        dest: /etc/environment
+        line: "GOPATH=\"{{ go_gopath }}\""
+        insertafter: EOF
+        regexp: "^GOPATH=\"{{ go_gopath }}\"$"
+        state: present
+      become: yes
+
+    - name: install comcast
+      command: go get {{ comcast_pkg }}
+      args:
+        creates: "{{ go_gopath }}/pkg/linux_amd64/{{ comcast_pkg }}"
+      environment:
+        GOPATH: "{{ go_gopath }}"
+      become: yes
+
